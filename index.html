@@ -11,12 +11,12 @@
   <style>
     :root{
       --brand:#000066;
-      --brand-hover:#3d47ff;
-      --fade:2200ms;          /* slow, smooth */
-      --interval:8000ms;      /* time on each slide */
-      --pad:clamp(10px,2.2vw,22px);   /* tighter to top/left */
-      --gap:clamp(8px,1.8vh,16px);    /* vertical spacing between lines */
-      --maxw:54ch;                     /* readable line length */
+      --brand-hover:#66ccff;   /* softer powder blue on hover */
+      --fade:3000ms;           /* slower, calmer crossfade */
+      --interval:10000ms;      /* image stays longer */
+      --pad:clamp(10px,2.2vw,22px);
+      --gap:clamp(8px,1.8vh,16px);
+      --maxw:54ch;
     }
 
     *{box-sizing:border-box}
@@ -47,34 +47,38 @@
       position: fixed; left: var(--pad); top: var(--pad);
       display: flex; flex-direction: column; gap: var(--gap);
       max-width: var(--maxw); text-align: left;
-      padding-right: max(12px, env(safe-area-inset-right)); /* room on the right edge */
-      /* light outline so navy reads over bright fabric */
+      padding-right: max(12px, env(safe-area-inset-right));
       text-shadow: 0 1px 0 rgba(255,255,255,.35);
     }
 
-    /* MUCH bigger logo, exactly at top-left */
+    /* Big logo, truly flush-left (trimmed asset recommended) */
     .logo{
       align-self:flex-start;
-      width: clamp(420px, 52vw, 1200px);  /* bigger range */
+      width: clamp(420px, 52vw, 1200px);
       height:auto;
       margin: 0 0 clamp(10px,2vh,18px) 0;
       display:block;
     }
 
-    /* Typography spacing */
-    p{ margin: 0 } /* we control rhythm with gap */
+    p{ margin: 0 } /* control rhythm with gap */
     .tag{ font-weight:600; }
     .sub{ opacity:.95; }
     .lead{ font-weight:600; }
+
+    /* Help block: moved lower into bottom half */
+    .help-group{
+      margin-top: clamp(24px, 22vh, 32vh); /* push this set down */
+      display:flex; flex-direction:column; gap: .55rem;
+    }
     .help{ opacity:.95; }
 
-    /* Links row */
-    .links{ display:flex; gap:12px; flex-wrap:wrap; align-items:center }
+    /* Links */
+    .links{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-top: 6px; }
     .links a{ color:var(--brand); text-decoration:none; font-weight:700 }
     .links a:hover{ color:var(--brand-hover); text-decoration:underline }
     .sep{ opacity:.5 }
 
-    /* Smaller & lower footnote */
+    /* Footnote smaller & lower */
     footer.footnote{
       position: fixed; left: var(--pad); bottom: var(--pad);
       font-size: clamp(11px,1.3vw,13px);
@@ -82,10 +86,11 @@
       text-shadow: 0 1px 0 rgba(255,255,255,.35);
     }
 
-    /* Keep things from getting cramped on small screens */
+    /* Guard against cramped tiny screens */
     @media (max-width: 480px), (max-height: 560px){
       :root{ --gap:clamp(6px,1.4vh,12px); --maxw:48ch }
       .logo{ width: clamp(320px, 66vw, 760px) }
+      .help-group{ margin-top: clamp(18px, 16vh, 24vh); }
     }
   </style>
 
@@ -100,7 +105,7 @@
   <!-- Background slideshow -->
   <div id="slideshow" aria-hidden="true"></div>
 
-  <!-- Overlay content (logo only, no duplicate “OUT OF BODY” text) -->
+  <!-- Overlay content -->
   <section class="overlay" role="region" aria-label="Intro">
     <img class="logo"
          src="images/brand/out-of-body-bed-bug-removal-extermination-toronto.webp"
@@ -109,7 +114,13 @@
     <p class="tag">Emotionally Attuned Pest Control.</p>
     <p class="sub">Toronto’s undercover bed bug specialist.</p>
     <p class="lead">The out of body experience begins here.</p>
-    <p class="help">If you have pictures, share them. If you have evidence, save it. Help is on the way.</p>
+
+    <!-- Pushed lower; separate lines with line breaks -->
+    <div class="help-group">
+      <p class="help">If you have pictures, share them.</p>
+      <p class="help">If you have evidence, save it.</p>
+      <p class="help">Help is on the way.</p>
+    </div>
 
     <p class="links">
       <a href="sms:">TEXT</a>
@@ -129,27 +140,24 @@
   </noscript>
 
   <script>
-    // Slideshow using your existing files
-    const COUNT = 22; // change if you add/remove
+    // === Slideshow using your existing files ===
     const BASE = "bed-bug-exterminator-removal-toronto-";
     const DESKTOP_DIR = "images/desktop/";
     const MOBILE_DIR  = "images/mobile/";
-    const INTERVAL_MS = 8000;
+    const INTERVAL_MS = 10000; // keep in sync with --interval
+
+    // EXCLUDE soft frames here without deleting files:
+    // Include ONLY the numbers you want to show.
+    // 02 is excluded by default. Remove any other numbers you dislike.
+    const ACTIVE = [1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22];
 
     const slideshow = document.getElementById("slideshow");
-    let index = 1;
+    let idx = 0; // index within ACTIVE
 
-    // Optional: restrict to a curated list to avoid any soft frames
-    // Example: const ACTIVE = [1,2,3,5,6,7,9,10,12,13,15,16,18,19,21,22];
-    const ACTIVE = undefined;
+    function idToNum(i){ return ACTIVE[i % ACTIVE.length]; }
 
-    function nth(n){
-      if (!ACTIVE) return n;
-      return ACTIVE[(n-1) % ACTIVE.length];
-    }
-
-    function makeSlide(n0){
-      const n = nth(n0);
+    function makeSlide(i){
+      const n = idToNum(i);
       const num = String(n).padStart(2,"0");
       const d = `${DESKTOP_DIR}${BASE}${num}.webp`;
       const m = `${MOBILE_DIR}${BASE}${num}.webp`;
@@ -164,31 +172,35 @@
       const img = document.createElement("img");
       img.src = d; img.alt = ""; // decorative
 
-      picture.appendChild(source); picture.appendChild(img);
+      picture.appendChild(source);
+      picture.appendChild(img);
       return picture;
     }
 
-    function preload(n0){
-      const n = nth(n0);
+    function preload(i){
+      const n = idToNum(i);
       const num = String(n).padStart(2,"0");
       new Image().src = `${DESKTOP_DIR}${BASE}${num}.webp`;
       new Image().src = `${MOBILE_DIR}${BASE}${num}.webp`;
     }
 
     (function init(){
-      const first = makeSlide(1);
+      const first = makeSlide(idx);
       first.classList.add("show");
       slideshow.appendChild(first);
-      preload(2); preload(3);
+      preload(idx+1); preload(idx+2);
     })();
 
     function nextSlide(){
-      index = (index % (ACTIVE ? ACTIVE.length : COUNT)) + 1;
-      const slide = makeSlide(index);
+      idx = (idx + 1) % ACTIVE.length;
+      const slide = makeSlide(idx);
       slideshow.appendChild(slide);
       requestAnimationFrame(()=> slide.classList.add("show"));
+
+      // keep only two layers (current + previous)
       while (slideshow.children.length > 2) slideshow.removeChild(slideshow.firstChild);
-      preload(index + 1);
+
+      preload(idx+1);
     }
 
     if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
