@@ -12,10 +12,10 @@
     :root{
       --brand:#000066;
       --brand-hover:#66ccff;       /* powder/robin's-egg hover */
-      --fade:1800ms;               /* crossfade duration */
+      --fade:2000ms;               /* crossfade duration */
       --pad:clamp(10px,2.2vw,22px);
       --gap:clamp(12px,2.2vh,20px);
-      --maxw:58ch;
+      --maxw:100ch;                /* allow the one-line 'lead' to fit */
     }
 
     *{box-sizing:border-box}
@@ -38,8 +38,8 @@
       transform: scale(1.015); /* subtle zoom */
       will-change: opacity, transform;
     }
-    .slide.show{ opacity: 1; transform: scale(1); }
-    .slide.fadeout{ opacity: 0; transform: scale(1.005); }
+    .slide.show    { opacity: 1; transform: scale(1); }
+    .slide.fadeout { opacity: 0; transform: scale(1.005); }
     .slide img{ width:100%; height:100%; object-fit:cover; display:block; background:#fff; }
     @media (prefers-reduced-motion: reduce){ .slide{ transition:none; transform:none } }
 
@@ -61,31 +61,32 @@
       display:block;
     }
 
-    /* TYPE SCALE (body text larger) */
+    /* TYPE SCALE */
     p{ margin: 0 }
     .tag{ font-weight:600; font-size: clamp(22px,2.5vw,30px); }
     .sub{ opacity:.95; font-size: clamp(20px,2.3vw,26px); }
 
-    /* Single-line lead, positioned between upper and help blocks */
+    /* Single-line lead between top block and help lines */
     .lead{
       font-weight:700;
       font-size: clamp(24px,2.8vw,34px);
-      white-space: nowrap;       /* force single line */
-      overflow: hidden;
-      text-overflow: ellipsis;   /* protects tiny screens */
-      margin-top: clamp(8px,1.2vh,12px);
+      white-space: nowrap;        /* keep on one line */
+      margin-top: clamp(10px,1.2vh,14px);
     }
 
-    /* Help block moved up (more prominent with links below it) */
+    /* Help block */
     .help-group{
-      margin-top: clamp(18px, 14vh, 22vh);  /* higher than before */
+      margin-top: clamp(18px, 14vh, 22vh);
       display:flex; flex-direction:column; gap: .85rem;
     }
     .help{ opacity:.95; font-size: clamp(20px,2.3vw,26px); }
     .help-strong{ font-weight:800; font-size: clamp(24px,2.8vw,32px); }
 
-    /* Links (more prominent, closer to help lines) */
-    .links{ display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin-top: 8px; }
+    /* Links (more separated and prominent) */
+    .links{
+      display:flex; gap:16px; flex-wrap:wrap; align-items:center;
+      margin-top: clamp(14px,2.2vh,18px);   /* more space from help lines */
+    }
     .links a{ color:var(--brand); text-decoration:none; font-weight:800; font-size: clamp(20px,2.3vw,24px) }
     .links a:hover{ color:var(--brand-hover); text-decoration:underline }
     .sep{ opacity:.5 }
@@ -100,7 +101,7 @@
 
     /* Guard tiny screens */
     @media (max-width: 480px), (max-height: 560px){
-      :root{ --gap:clamp(10px,1.8vh,16px); --maxw:54ch }
+      :root{ --gap:clamp(10px,1.8vh,16px); --maxw:90ch }
       .logo{ width: clamp(360px, 70vw, 820px) }
       .help-group{ margin-top: clamp(16px, 12vh, 18vh); }
       .lead{ white-space: normal; } /* allow wrap only on very small screens */
@@ -150,15 +151,15 @@
   </noscript>
 
   <script>
-    // === Slideshow with true crossfade, random 2–4s, and robust fallbacks ===
+    // === Slideshow with true crossfade & random 2–4s (excluding 02) ===
     const BASE = "bed-bug-exterminator-removal-toronto-";
     const D1  = "images/desktop/";
     const D2  = "images/desktop-2x/";
     const M1  = "images/mobile/";
     const M2  = "images/mobile-2x/";
 
-    // Exclude any soft frames here (02 already removed):
-    const ACTIVE = [1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22];
+    // Use 01 and 03–21 only
+    const ACTIVE = [1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];
 
     const slideshow = document.getElementById("slideshow");
     let idx = 0;
@@ -169,7 +170,7 @@
     const fadeMs = (() => {
       const v = getComputedStyle(document.documentElement).getPropertyValue('--fade').trim();
       const m = v.match(/([\d.]+)ms/);
-      return m ? parseFloat(m[1]) : 1800;
+      return m ? parseFloat(m[1]) : 2000;
     })();
 
     function makePicture(num){
@@ -186,15 +187,12 @@
       const img = document.createElement("img");
       img.alt = "";
 
-      // load 1x first, let srcset upgrade to 2x if available
+      // load 1x first; srcset upgrades to 2x automatically
       img.src    = `${D1}${BASE}${num}.webp`;
       img.srcset = `${D1}${BASE}${num}.webp 1x, ${D2}${BASE}${num}.webp 2x`;
 
-      // if 1x fails (deleted/missing), fallback to 2x
-      img.onerror = () => {
-        img.onerror = null;
-        img.src = `${D2}${BASE}${num}.webp`;
-      };
+      // if 1x missing, fallback to 2x to avoid white frame
+      img.onerror = () => { img.onerror = null; img.src = `${D2}${BASE}${num}.webp`; };
 
       picture.appendChild(img);
       return picture;
@@ -207,16 +205,16 @@
       new Image().src = `${M1}${BASE}${num}.webp`;
     }
 
-    function start(){
+    function scheduleNext(){ setTimeout(next, randDelay()); }
+
+    (function init(){
       const firstNum = pad(ACTIVE[idx]);
       current = makePicture(firstNum);
       current.classList.add("show");
       slideshow.appendChild(current);
       preload(idx+1); preload(idx+2);
       scheduleNext();
-    }
-
-    function scheduleNext(){ setTimeout(next, randDelay()); }
+    })();
 
     function next(){
       idx = (idx + 1) % ACTIVE.length;
@@ -225,10 +223,10 @@
       const incoming = makePicture(num);
       slideshow.appendChild(incoming);
 
-      // fade in the new one on the next frame
+      // fade new in
       requestAnimationFrame(()=> incoming.classList.add("show"));
 
-      // fade out current; remove only after fade completes
+      // fade old out and remove after transition
       if (current){
         current.classList.remove("show");
         current.classList.add("fadeout");
@@ -242,15 +240,9 @@
       scheduleNext();
     }
 
-    // Kick off
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
-      start();
-    } else {
-      // Reduced motion: only show the first frame
-      const firstNum = pad(ACTIVE[0]);
-      current = makePicture(firstNum);
-      current.classList.add("show");
-      slideshow.appendChild(current);
+    // Respect reduced motion
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+      while (slideshow.children.length > 1) slideshow.removeChild(slideshow.lastChild);
     }
   </script>
 </body>
