@@ -12,11 +12,11 @@
     :root{
       --brand:#000066;
       --brand-hover:#3d47ff;
-      --fade:2200ms;         /* slow, smooth */
-      --interval:8000ms;     /* time on each slide */
-      --pad:clamp(14px,2.6vw,28px);    /* tighter to top/left */
-      --gap:clamp(6px,1.4vh,14px);     /* vertical spacing */
-      --maxw:48ch;           /* readable line length */
+      --fade:2200ms;          /* slow, smooth */
+      --interval:8000ms;      /* time on each slide */
+      --pad:clamp(10px,2.2vw,22px);   /* tighter to top/left */
+      --gap:clamp(8px,1.8vh,16px);    /* vertical spacing between lines */
+      --maxw:54ch;                     /* readable line length */
     }
 
     *{box-sizing:border-box}
@@ -25,6 +25,8 @@
       font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--brand);
       overflow:hidden; /* fixed pane (no scroll) */
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
     }
 
     /* Slideshow behind content */
@@ -45,37 +47,45 @@
       position: fixed; left: var(--pad); top: var(--pad);
       display: flex; flex-direction: column; gap: var(--gap);
       max-width: var(--maxw); text-align: left;
+      padding-right: max(12px, env(safe-area-inset-right)); /* room on the right edge */
       /* light outline so navy reads over bright fabric */
       text-shadow: 0 1px 0 rgba(255,255,255,.35);
     }
 
-    /* MUCH bigger logo, pinned to top-left */
+    /* MUCH bigger logo, exactly at top-left */
     .logo{
-      align-self: flex-start;
-      width: clamp(360px, 42vw, 900px);  /* ~3× bigger than before */
-      height: auto;
-      margin: 0 0 clamp(8px,2vh,18px) 0;
+      align-self:flex-start;
+      width: clamp(420px, 52vw, 1200px);  /* bigger range */
+      height:auto;
+      margin: 0 0 clamp(10px,2vh,18px) 0;
       display:block;
     }
 
-    /* Typographic rhythm */
-    .tag{ font-weight: 600; }
+    /* Typography spacing */
+    p{ margin: 0 } /* we control rhythm with gap */
+    .tag{ font-weight:600; }
     .sub{ opacity:.95; }
-    .lead{ font-weight: 600; }
+    .lead{ font-weight:600; }
     .help{ opacity:.95; }
 
-    /* Links */
-    .links{ margin-top: 6px; display:flex; gap:12px; flex-wrap:wrap; align-items:center }
-    .links a{ color: var(--brand); text-decoration: none; font-weight: 700; }
-    .links a:hover{ color: var(--brand-hover); text-decoration: underline; }
-    .sep{ opacity:.5; }
+    /* Links row */
+    .links{ display:flex; gap:12px; flex-wrap:wrap; align-items:center }
+    .links a{ color:var(--brand); text-decoration:none; font-weight:700 }
+    .links a:hover{ color:var(--brand-hover); text-decoration:underline }
+    .sep{ opacity:.5 }
 
-    /* Footnote smaller & lower */
+    /* Smaller & lower footnote */
     footer.footnote{
       position: fixed; left: var(--pad); bottom: var(--pad);
-      font-size: clamp(11px,1.4vw,13px);
+      font-size: clamp(11px,1.3vw,13px);
       opacity:.85;
       text-shadow: 0 1px 0 rgba(255,255,255,.35);
+    }
+
+    /* Keep things from getting cramped on small screens */
+    @media (max-width: 480px), (max-height: 560px){
+      :root{ --gap:clamp(6px,1.4vh,12px); --maxw:48ch }
+      .logo{ width: clamp(320px, 66vw, 760px) }
     }
   </style>
 
@@ -90,10 +100,11 @@
   <!-- Background slideshow -->
   <div id="slideshow" aria-hidden="true"></div>
 
-  <!-- Overlay content (no extra “OUT OF BODY” text — logo only) -->
+  <!-- Overlay content (logo only, no duplicate “OUT OF BODY” text) -->
   <section class="overlay" role="region" aria-label="Intro">
-    <img class="logo" src="images/brand/out-of-body-bed-bug-removal-extermination-toronto.webp"
-         alt="Out-of-Body lettermark" width="900" height="300" decoding="async">
+    <img class="logo"
+         src="images/brand/out-of-body-bed-bug-removal-extermination-toronto.webp"
+         alt="Out-of-Body lettermark" width="1200" height="400" decoding="async">
 
     <p class="tag">Emotionally Attuned Pest Control.</p>
     <p class="sub">Toronto’s undercover bed bug specialist.</p>
@@ -128,8 +139,8 @@
     const slideshow = document.getElementById("slideshow");
     let index = 1;
 
-    // (Optional) If any frames look bad, list the ones you want to use here and we’ll cycle those only:
-    // e.g., const ACTIVE = [1,2,3,5,6,7,9,...];  // leave undefined to include all 1..COUNT
+    // Optional: restrict to a curated list to avoid any soft frames
+    // Example: const ACTIVE = [1,2,3,5,6,7,9,10,12,13,15,16,18,19,21,22];
     const ACTIVE = undefined;
 
     function nth(n){
@@ -145,11 +156,14 @@
 
       const picture = document.createElement("picture");
       picture.className = "slide";
+
       const source = document.createElement("source");
       source.media = "(max-width: 767px)";
       source.srcset = m;
+
       const img = document.createElement("img");
-      img.src = d; img.alt = "";
+      img.src = d; img.alt = ""; // decorative
+
       picture.appendChild(source); picture.appendChild(img);
       return picture;
     }
