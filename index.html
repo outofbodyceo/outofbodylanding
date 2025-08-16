@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Out-of-Body Pest Control — Bed Bug Exterminator & Removal in Toronto</title>
+  <title>Out of Body Pest Control — Bed Bug Exterminator & Removal in Toronto</title>
 
   <!-- Inter font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -11,12 +11,11 @@
   <style>
     :root{
       --brand:#000066;
-      --brand-hover:#66ccff;   /* powder/robin's-egg hover */
-      --fade:4000ms;           /* smooth, slow fade */
-      --interval:12000ms;      /* calmer rotation */
+      --brand-hover:#66ccff;       /* powder/robin's-egg hover */
+      --fade:1600ms;               /* smooth crossfade duration */
       --pad:clamp(10px,2.2vw,22px);
-      --gap:clamp(10px,2.2vh,18px);
-      --maxw:56ch;
+      --gap:clamp(12px,2.4vh,20px);/* bigger rhythm */
+      --maxw:58ch;
     }
 
     *{box-sizing:border-box}
@@ -35,11 +34,11 @@
     .slide {
       opacity: 0;
       transition: opacity var(--fade) ease-in-out, transform var(--fade) ease-in-out;
-      transform: scale(1.02);
+      transform: scale(1.02); /* subtle zoom */
       will-change: opacity, transform;
     }
     .slide.show { opacity: 1; transform: scale(1); }
-    .slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .slide img { width: 100%; height: 100%; object-fit: cover; display:block; }
     @media (prefers-reduced-motion: reduce){ .slide{ transition:none; transform:none } }
 
     /* Left-aligned overlay */
@@ -48,39 +47,39 @@
       display: flex; flex-direction: column; gap: var(--gap);
       max-width: var(--maxw); text-align: left;
       padding-right: max(12px, env(safe-area-inset-right));
-      text-shadow: 0 1px 0 rgba(255,255,255,.35);
+      text-shadow: 0 1px 0 rgba(255,255,255,.35); /* help navy over light fabric */
     }
 
     /* Big logo, flush-left (trimmed asset recommended) */
     .logo{
       align-self:flex-start;
-      width: clamp(440px, 54vw, 1200px);
+      width: clamp(460px, 56vw, 1200px);
       height:auto;
-      margin: 0 0 clamp(12px,2.2vh,20px) 0;
+      margin: 0 0 clamp(14px,2.2vh,22px) 0;
       display:block;
     }
 
-    /* TYPE SCALE (~2× bigger than before) */
+    /* TYPE SCALE (body text larger) */
     p{ margin: 0 }
-    .tag{ font-weight:600; font-size: clamp(20px,2.3vw,28px); }
-    .sub{ opacity:.95; font-size: clamp(18px,2.1vw,24px); }
-    .lead{ font-weight:700; font-size: clamp(22px,2.6vw,32px); margin-top: clamp(6px,1vh,10px); }
+    .tag{ font-weight:600; font-size: clamp(22px,2.5vw,30px); }
+    .sub{ opacity:.95; font-size: clamp(20px,2.3vw,26px); }
+    .lead{ font-weight:700; font-size: clamp(24px,2.8vw,34px); margin-top: clamp(8px,1.2vh,12px); }
 
-    /* Help block lower on page, 3 lines with emphasis on last */
+    /* Help block lower on page */
     .help-group{
-      margin-top: clamp(28px, 24vh, 36vh); /* pushes this block into lower half */
-      display:flex; flex-direction:column; gap: .7rem;
+      margin-top: clamp(30px, 26vh, 38vh);
+      display:flex; flex-direction:column; gap: .85rem;
     }
-    .help{ opacity:.95; font-size: clamp(18px,2.1vw,24px); }
-    .help-strong{ font-weight:800; font-size: clamp(22px,2.6vw,30px); }
+    .help{ opacity:.95; font-size: clamp(20px,2.3vw,26px); }
+    .help-strong{ font-weight:800; font-size: clamp(24px,2.8vw,32px); }
 
     /* Links */
-    .links{ display:flex; gap:14px; flex-wrap:wrap; align-items:center; margin-top: 10px; }
-    .links a{ color:var(--brand); text-decoration:none; font-weight:800; font-size: clamp(18px,2.1vw,22px) }
+    .links{ display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin-top: 12px; }
+    .links a{ color:var(--brand); text-decoration:none; font-weight:800; font-size: clamp(20px,2.3vw,24px) }
     .links a:hover{ color:var(--brand-hover); text-decoration:underline }
     .sep{ opacity:.5 }
 
-    /* Footnote smaller & lower, with period */
+    /* Footnote */
     footer.footnote{
       position: fixed; left: var(--pad); bottom: var(--pad);
       font-size: clamp(12px,1.3vw,14px);
@@ -90,17 +89,14 @@
 
     /* Guard tiny screens */
     @media (max-width: 480px), (max-height: 560px){
-      :root{ --gap:clamp(8px,1.6vh,14px); --maxw:52ch }
-      .logo{ width: clamp(340px, 68vw, 820px) }
-      .help-group{ margin-top: clamp(22px, 18vh, 26vh); }
+      :root{ --gap:clamp(10px,1.8vh,16px); --maxw:54ch }
+      .logo{ width: clamp(360px, 70vw, 820px) }
+      .help-group{ margin-top: clamp(24px, 20vh, 28vh); }
     }
   </style>
 
-  <!-- Preload first slide (desktop + mobile hint) -->
-  <link rel="preload" as="image"
-        href="images/desktop/bed-bug-exterminator-removal-toronto-01.webp"
-        imagesrcset="images/mobile/bed-bug-exterminator-removal-toronto-01.webp 768w,
-                     images/desktop/bed-bug-exterminator-removal-toronto-01.webp 1920w">
+  <!-- Preload the very first desktop image (1×) to get paint started -->
+  <link rel="preload" as="image" href="images/desktop/bed-bug-exterminator-removal-toronto-01.webp">
 </head>
 <body>
 
@@ -111,15 +107,13 @@
   <section class="overlay" role="region" aria-label="Intro">
     <img class="logo"
          src="images/brand/out-of-body-bed-bug-removal-extermination-toronto.webp"
-         alt="Out-of-Body lettermark" width="1200" height="400" decoding="async">
+         alt="Out of Body lettermark" width="1200" height="400" decoding="async">
 
     <p class="tag">Emotionally Attuned Pest Control.</p>
     <p class="sub">Toronto’s undercover bed bug specialist.</p>
 
-    <!-- moved up -->
-    <p class="lead">The out-of-body experience begins here.</p>
+    <p class="lead">The out of body experience begins here.</p>
 
-    <!-- lower block with three lines -->
     <div class="help-group">
       <p class="help">If you have pictures, share them.</p>
       <p class="help">If you have evidence, save it.</p>
@@ -129,13 +123,12 @@
     <p class="links">
       <a href="sms:+14164646411">TEXT</a>
       <span class="sep">•</span>
-      <a href="mailto:hello@out-of-body.ca">EMAIL</a>
+      <a href="mailto:hello@outofbody.ca">EMAIL</a>
     </p>
   </section>
 
   <footer class="footnote" aria-label="Licensing">Fully licensed &amp; guaranteed.</footer>
 
-  <!-- No-JS fallback -->
   <noscript>
     <picture class="slide show">
       <source media="(max-width: 767px)" srcset="images/mobile/bed-bug-exterminator-removal-toronto-01.webp">
@@ -144,45 +137,52 @@
   </noscript>
 
   <script>
-    // === Slideshow using your existing files ===
+    // === Slideshow with crisp 1x/2x sources & random 2–4s timing ===
     const BASE = "bed-bug-exterminator-removal-toronto-";
-    const DESKTOP_DIR = "images/desktop/";
-    const MOBILE_DIR  = "images/mobile/";
-    const INTERVAL_MS = 12000; // keep in sync with --interval
+    const D1  = "images/desktop/";
+    const D2  = "images/desktop-2x/";
+    const M1  = "images/mobile/";
+    const M2  = "images/mobile-2x/";
 
-    // EXCLUDE soft frames here (02 already removed):
+    // Curate out soft frames here (02 removed by default).
+    // Include ONLY the numbers you want to show.
     const ACTIVE = [1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22];
 
     const slideshow = document.getElementById("slideshow");
     let idx = 0;
 
-    function idToNum(i){ return ACTIVE[i % ACTIVE.length]; }
+    const pad = n => String(n).padStart(2,"0");
+    const randDelay = () => 2000 + Math.random() * 2000; // 2–4 seconds
 
     function makeSlide(i){
-      const n = idToNum(i);
-      const num = String(n).padStart(2,"0");
-      const d = `${DESKTOP_DIR}${BASE}${num}.webp`;
-      const m = `${MOBILE_DIR}${BASE}${num}.webp`;
+      const n = ACTIVE[i % ACTIVE.length];
+      const num = pad(n);
 
       const picture = document.createElement("picture");
       picture.className = "slide";
 
+      // Mobile first (1x/2x)
       const source = document.createElement("source");
-      source.media = "(max-width: 767px)";
-      source.srcset = m;
+      source.media  = "(max-width: 767px)";
+      source.srcset = `${M1}${BASE}${num}.webp 1x, ${M2}${BASE}${num}.webp 2x`;
+      picture.appendChild(source);
 
+      // Desktop (1x/2x)
       const img = document.createElement("img");
-      img.src = d; img.alt = "";
+      img.src = `${D1}${BASE}${num}.webp`;
+      img.srcset = `${D1}${BASE}${num}.webp 1x, ${D2}${BASE}${num}.webp 2x`;
+      img.alt = "";
+      picture.appendChild(img);
 
-      picture.appendChild(source); picture.appendChild(img);
       return picture;
     }
 
+    // Preload next (1x only to keep bandwidth reasonable)
     function preload(i){
-      const n = idToNum(i);
-      const num = String(n).padStart(2,"0");
-      new Image().src = `${DESKTOP_DIR}${BASE}${num}.webp`;
-      new Image().src = `${MOBILE_DIR}${BASE}${num}.webp`;
+      const n = ACTIVE[i % ACTIVE.length];
+      const num = pad(n);
+      new Image().src = `${D1}${BASE}${num}.webp`;
+      new Image().src = `${M1}${BASE}${num}.webp`;
     }
 
     (function init(){
@@ -190,25 +190,34 @@
       first.classList.add("show");
       slideshow.appendChild(first);
       preload(idx+1); preload(idx+2);
+      scheduleNext(); // start loop
     })();
+
+    function scheduleNext(){
+      setTimeout(nextSlide, randDelay());
+    }
 
     function nextSlide(){
       idx = (idx + 1) % ACTIVE.length;
       const slide = makeSlide(idx);
       slideshow.appendChild(slide);
+
+      // trigger fade-in
       requestAnimationFrame(()=> slide.classList.add("show"));
 
-      // keep only two layers (current + previous) after the fade window
-      // (ensures fade feels smooth even on slower devices)
+      // prune older layers AFTER fade so the crossfade is smooth
       setTimeout(()=>{
         while (slideshow.children.length > 2) slideshow.removeChild(slideshow.firstChild);
-      }, parseInt(getComputedStyle(document.documentElement).getPropertyValue('--fade')) + 60);
+      },  parseInt(getComputedStyle(document.documentElement).getPropertyValue('--fade')) + 80);
 
       preload(idx+1);
+      scheduleNext();
     }
 
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
-      setInterval(nextSlide, INTERVAL_MS);
+    // Respect reduced motion
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+      // show first only (no animation)
+      while (slideshow.children.length > 1) slideshow.removeChild(slideshow.lastChild);
     }
   </script>
 </body>
