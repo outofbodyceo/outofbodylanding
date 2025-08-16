@@ -4,16 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Out-of-Body Pest Control — Bed Bug Exterminator & Removal in Toronto</title>
+
+  <!-- Inter font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
       --brand:#000066;
       --brand-hover:#3d47ff;
-      --fade:2200ms;
-      --interval:8000ms;
-      --pad:clamp(10px,3vw,24px);   /* tighter to the left/top */
-      --maxw:42ch;
+      --fade:2200ms;         /* slow, smooth */
+      --interval:8000ms;     /* time on each slide */
+      --pad:clamp(14px,2.6vw,28px);    /* tighter to top/left */
+      --gap:clamp(6px,1.4vh,14px);     /* vertical spacing */
+      --maxw:48ch;           /* readable line length */
     }
 
     *{box-sizing:border-box}
@@ -21,7 +24,7 @@
     body{
       font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--brand);
-      overflow:hidden; /* fixed pane */
+      overflow:hidden; /* fixed pane (no scroll) */
     }
 
     /* Slideshow behind content */
@@ -30,39 +33,44 @@
     .slide {
       opacity: 0;
       transition: opacity var(--fade) ease-in-out, transform var(--fade) ease-in-out;
-      transform: scale(1.02);
+      transform: scale(1.02); /* subtle zoom */
       will-change: opacity, transform;
     }
     .slide.show { opacity: 1; transform: scale(1); }
     .slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    @media (prefers-reduced-motion: reduce){ .slide{ transition:none; transform:none; } }
+    @media (prefers-reduced-motion: reduce){ .slide{ transition:none; transform:none } }
 
     /* Left-aligned overlay */
     .overlay{
       position: fixed; left: var(--pad); top: var(--pad);
-      display: flex; flex-direction: column; gap: clamp(6px,1.4vh,12px);
+      display: flex; flex-direction: column; gap: var(--gap);
       max-width: var(--maxw); text-align: left;
-      text-shadow: 0 1px 0 rgba(255,255,255,.35); /* keeps navy readable */
+      /* light outline so navy reads over bright fabric */
+      text-shadow: 0 1px 0 rgba(255,255,255,.35);
     }
+
+    /* MUCH bigger logo, pinned to top-left */
     .logo{
-      align-self:flex-start;
-      width: clamp(220px, 34vw, 520px); /* BIGGER logo */
+      align-self: flex-start;
+      width: clamp(360px, 42vw, 900px);  /* ~3× bigger than before */
       height: auto;
+      margin: 0 0 clamp(8px,2vh,18px) 0;
       display:block;
-      margin: 0 0 clamp(8px,2vh,16px) 0;
     }
-    h1{ margin: 0; font-size: clamp(28px,4.8vw,46px); letter-spacing:.02em; }
+
+    /* Typographic rhythm */
     .tag{ font-weight: 600; }
     .sub{ opacity:.95; }
     .lead{ font-weight: 600; }
     .help{ opacity:.95; }
 
+    /* Links */
     .links{ margin-top: 6px; display:flex; gap:12px; flex-wrap:wrap; align-items:center }
     .links a{ color: var(--brand); text-decoration: none; font-weight: 700; }
     .links a:hover{ color: var(--brand-hover); text-decoration: underline; }
     .sep{ opacity:.5; }
 
-    /* Smaller & lower footnote */
+    /* Footnote smaller & lower */
     footer.footnote{
       position: fixed; left: var(--pad); bottom: var(--pad);
       font-size: clamp(11px,1.4vw,13px);
@@ -71,26 +79,28 @@
     }
   </style>
 
+  <!-- Preload first slide (desktop + mobile hint) -->
   <link rel="preload" as="image"
         href="images/desktop/bed-bug-exterminator-removal-toronto-01.webp"
         imagesrcset="images/mobile/bed-bug-exterminator-removal-toronto-01.webp 768w,
                      images/desktop/bed-bug-exterminator-removal-toronto-01.webp 1920w">
 </head>
 <body>
+
   <!-- Background slideshow -->
   <div id="slideshow" aria-hidden="true"></div>
 
-  <!-- Overlay content -->
+  <!-- Overlay content (no extra “OUT OF BODY” text — logo only) -->
   <section class="overlay" role="region" aria-label="Intro">
-    <img class="logo" src="images/brand/out-of-body-bed-bug-removal-extermination-toronto.webp" alt="Out-of-Body lettermark" width="520" height="200" decoding="async">
-    <h1>OUT OF BODY</h1>
+    <img class="logo" src="images/brand/out-of-body-bed-bug-removal-extermination-toronto.webp"
+         alt="Out-of-Body lettermark" width="900" height="300" decoding="async">
+
     <p class="tag">Emotionally Attuned Pest Control.</p>
     <p class="sub">Toronto’s undercover bed bug specialist.</p>
     <p class="lead">The out of body experience begins here.</p>
     <p class="help">If you have pictures, share them. If you have evidence, save it. Help is on the way.</p>
 
     <p class="links">
-      <!-- Generic launch links (no hard-coded contact) -->
       <a href="sms:">TEXT</a>
       <span class="sep">•</span>
       <a href="mailto:">EMAIL</a>
@@ -99,6 +109,7 @@
 
   <footer class="footnote" aria-label="Licensing">Fully licensed &amp; guaranteed</footer>
 
+  <!-- No-JS fallback -->
   <noscript>
     <picture class="slide show">
       <source media="(max-width: 767px)" srcset="images/mobile/bed-bug-exterminator-removal-toronto-01.webp">
@@ -108,7 +119,7 @@
 
   <script>
     // Slideshow using your existing files
-    const COUNT = 22;
+    const COUNT = 22; // change if you add/remove
     const BASE = "bed-bug-exterminator-removal-toronto-";
     const DESKTOP_DIR = "images/desktop/";
     const MOBILE_DIR  = "images/mobile/";
@@ -117,10 +128,21 @@
     const slideshow = document.getElementById("slideshow");
     let index = 1;
 
-    function makeSlide(n){
+    // (Optional) If any frames look bad, list the ones you want to use here and we’ll cycle those only:
+    // e.g., const ACTIVE = [1,2,3,5,6,7,9,...];  // leave undefined to include all 1..COUNT
+    const ACTIVE = undefined;
+
+    function nth(n){
+      if (!ACTIVE) return n;
+      return ACTIVE[(n-1) % ACTIVE.length];
+    }
+
+    function makeSlide(n0){
+      const n = nth(n0);
       const num = String(n).padStart(2,"0");
       const d = `${DESKTOP_DIR}${BASE}${num}.webp`;
       const m = `${MOBILE_DIR}${BASE}${num}.webp`;
+
       const picture = document.createElement("picture");
       picture.className = "slide";
       const source = document.createElement("source");
@@ -128,29 +150,33 @@
       source.srcset = m;
       const img = document.createElement("img");
       img.src = d; img.alt = "";
-      picture.appendChild(source);
-      picture.appendChild(img);
+      picture.appendChild(source); picture.appendChild(img);
       return picture;
     }
-    function preload(n){
+
+    function preload(n0){
+      const n = nth(n0);
       const num = String(n).padStart(2,"0");
       new Image().src = `${DESKTOP_DIR}${BASE}${num}.webp`;
       new Image().src = `${MOBILE_DIR}${BASE}${num}.webp`;
     }
+
     (function init(){
       const first = makeSlide(1);
       first.classList.add("show");
       slideshow.appendChild(first);
       preload(2); preload(3);
     })();
+
     function nextSlide(){
-      index = (index % COUNT) + 1;
+      index = (index % (ACTIVE ? ACTIVE.length : COUNT)) + 1;
       const slide = makeSlide(index);
       slideshow.appendChild(slide);
       requestAnimationFrame(()=> slide.classList.add("show"));
       while (slideshow.children.length > 2) slideshow.removeChild(slideshow.firstChild);
-      preload((index % COUNT) + 1);
+      preload(index + 1);
     }
+
     if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
       setInterval(nextSlide, INTERVAL_MS);
     }
