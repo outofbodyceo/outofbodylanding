@@ -5,124 +5,88 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Out of Body Pest Control — Bed Bug Exterminator & Removal in Toronto</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
       --brand:#000066;
-      --hover:#66ccff;           /* powder blue */
-      --fade:1800ms;             /* crossfade duration */
+      --hover:#66ccff;
+      --fade:1800ms;                  /* crossfade duration */
       --pad:clamp(10px,2.2vw,22px);
       --gap:clamp(12px,2.2vh,20px);
-      --maxw:100ch;              /* allow single-line lead */
+      --maxw:100ch;                   /* keep lead on one line */
     }
     *{box-sizing:border-box}
     html,body{height:100%;margin:0}
     body{
       font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--brand);
-      overflow:hidden;           /* fixed pane */
+      overflow:hidden;
       -webkit-font-smoothing:antialiased;
       text-rendering:optimizeLegibility;
     }
 
     /* Slideshow behind content */
-    #slideshow, .slide { position: fixed; inset: 0; }
-    #slideshow { z-index: -1; overflow: hidden; background:#fff; }
-    .slide{
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity var(--fade) ease-in-out, transform var(--fade) ease-in-out;
-      transform: scale(1.01); /* subtle calm zoom */
-      will-change: opacity, transform;
-    }
-    .slide.show    { opacity: 1; transform: scale(1); }
-    .slide.fadeout { opacity: 0; }
-    .slide img{ width:100%; height:100%; object-fit:cover; display:block; background:#fff; }
-    /* Keep the fade even with reduced motion; drop only the zoom */
-    @media (prefers-reduced-motion: reduce){
-      .slide{ transition: opacity var(--fade) ease-in-out; transform:none; }
-    }
+    #slideshow{ position:fixed; inset:0; z-index:-1; overflow:hidden; background:#fff; }
+    .slide{ position:absolute; inset:0; opacity:0; transition:opacity var(--fade) ease-in-out; }
+    .slide.show{ opacity:1; }
+    .slide picture, .slide img{ width:100%; height:100%; display:block; }
+    .slide img{ object-fit:cover; background:#fff; }
+    @media (prefers-reduced-motion: reduce){ .slide{ transition:none } }
 
-    /* Overlay content */
+    /* Overlay content (left-ruled) */
     .overlay{
-      position: fixed; left: var(--pad); top: var(--pad);
-      display: flex; flex-direction: column; gap: var(--gap);
-      max-width: var(--maxw); text-align: left;
-      padding-right: max(12px, env(safe-area-inset-right));
-      text-shadow: 0 1px 0 rgba(255,255,255,.35);
+      position:fixed; left:var(--pad); top:var(--pad);
+      display:flex; flex-direction:column; gap:var(--gap);
+      max-width:var(--maxw); text-align:left;
+      text-shadow:0 1px 0 rgba(255,255,255,.35);
     }
-    .logo{
-      align-self:flex-start;
-      width: clamp(460px, 56vw, 1200px);
-      height:auto;
-      margin: 0 0 clamp(14px,2.2vh,22px) 0;
-      display:block;
-    }
+    .logo{ align-self:flex-start; width:clamp(460px,56vw,1200px); height:auto; margin:0 0 clamp(14px,2.2vh,22px) 0; }
 
-    /* Type scale */
-    p{ margin: 0 }
+    p{ margin:0 }
     .tag{ font-weight:600; font-size: clamp(22px,2.5vw,30px); }
     .sub{ opacity:.95; font-size: clamp(20px,2.3vw,26px); }
-
-    /* Single-line lead between top block and help lines */
     .lead{
-      font-weight:700;
-      font-size: clamp(24px,2.8vw,34px);
-      white-space: nowrap;        /* keep on one line */
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-top: clamp(10px,1.2vh,14px);
+      font-weight:700; font-size:clamp(24px,2.8vw,34px);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      margin-top:clamp(10px,1.2vh,14px);
     }
+    .help-group{ margin-top:clamp(18px,14vh,22vh); display:flex; flex-direction:column; gap:.85rem; }
+    .help{ opacity:.95; font-size:clamp(20px,2.3vw,26px); }
+    .help-strong{ font-weight:800; font-size:clamp(24px,2.8vw,32px); }
 
-    /* Help block */
-    .help-group{
-      margin-top: clamp(18px, 14vh, 22vh);
-      display:flex; flex-direction:column; gap: .85rem;
-    }
-    .help{ opacity:.95; font-size: clamp(20px,2.3vw,26px); }
-    .help-strong{ font-weight:800; font-size: clamp(24px,2.8vw,32px); }
-
-    /* Links, with extra breathing room above */
-    .links{
-      display:flex; gap:16px; flex-wrap:wrap; align-items:center;
-      margin-top: clamp(16px,2.6vh,22px);
-    }
-    .links a{ color:var(--brand); text-decoration:none; font-weight:800; font-size: clamp(20px,2.3vw,24px) }
+    .links{ display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin-top:clamp(16px,2.6vh,22px); }
+    .links a{ color:var(--brand); font-weight:800; text-decoration:none; font-size:clamp(20px,2.3vw,24px) }
     .links a:hover{ color:var(--hover); text-decoration:underline }
     .sep{ opacity:.5 }
 
     footer.footnote{
-      position: fixed; left: var(--pad); bottom: var(--pad);
-      font-size: clamp(12px,1.3vw,14px);
-      opacity:.9;
-      text-shadow: 0 1px 0 rgba(255,255,255,.35);
+      position:fixed; left:var(--pad); bottom:var(--pad);
+      font-size:clamp(12px,1.3vw,14px); opacity:.9; text-shadow:0 1px 0 rgba(255,255,255,.35);
     }
 
-    /* Small screens */
-    @media (max-width: 480px), (max-height: 560px){
+    @media (max-width:480px),(max-height:560px){
       :root{ --gap:clamp(10px,1.8vh,16px); --maxw:90ch }
-      .logo{ width: clamp(360px, 70vw, 820px) }
-      .help-group{ margin-top: clamp(16px, 12vh, 18vh); }
-      .lead{ white-space: normal; } /* wrap on very tiny screens */
+      .logo{ width:clamp(360px,70vw,820px) }
+      .help-group{ margin-top:clamp(16px,12vh,18vh) }
+      .lead{ white-space:normal; } /* only wrap on very tiny screens */
     }
   </style>
-
-  <link rel="preload" as="image" href="images/desktop/bed-bug-exterminator-removal-toronto-01.webp">
 </head>
 <body>
 
-  <div id="slideshow" aria-hidden="true"></div>
+  <!-- Two persistent slides -->
+  <div id="slideshow">
+    <div id="slideA" class="slide show"><picture><img alt="" /></picture></div>
+    <div id="slideB" class="slide"><picture><img alt="" /></picture></div>
+  </div>
 
   <section class="overlay" role="region" aria-label="Intro">
-    <img class="logo"
-         src="images/brand/out-of-body-bed-bug-removal-extermination-toronto.webp"
+    <img class="logo" src="images/brand/out-of-body-bed-bug-removal-extermination-toronto.webp"
          alt="Out of Body lettermark" width="1200" height="400" decoding="async">
 
     <p class="tag">Emotionally Attuned Pest Control.</p>
     <p class="sub">Toronto’s undercover bed bug specialist.</p>
-
     <p class="lead">The out of body experience begins here.</p>
 
     <div class="help-group">
@@ -138,160 +102,98 @@
     </p>
   </section>
 
-  <footer class="footnote" aria-label="Licensing">Fully licensed &amp; guaranteed.</footer>
+  <footer class="footnote">Fully licensed &amp; guaranteed.</footer>
 
   <script>
-    // ==== Slideshow with true crossfade, random 2–4s, manifest support ====
+    // ---------- CONFIG ----------
+    const BASE = "bed-bug-exterminator-removal-toronto-";
+    // Use 01 and 03–21 only (02 removed)
+    const NUMBERS = [1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];
 
-    const D1 = "images/desktop/";      // 1x fallback
-    const D2 = "images/desktop-2x/";   // retina
-    const M1 = "images/mobile/";       // 1x fallback
-    const M2 = "images/mobile-2x/";    // retina
+    // paths
+    const D1 = "images/desktop/";     // 1x fallback (safe base)
+    const D2 = "images/desktop-2x/";  // 2x
+    const M1 = "images/mobile/";      // 1x
+    const M2 = "images/mobile-2x/";   // 2x
 
-    const slideshow = document.getElementById("slideshow");
-    const fadeMs = (() => {
-      const v = getComputedStyle(document.documentElement).getPropertyValue('--fade').trim();
-      const m = v.match(/([\d.]+)ms/);
-      return m ? parseFloat(m[1]) : 1800;
-    })();
-    const randDelay = () => 2000 + Math.random() * 2000; // 2–4s
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    // timing
+    const fadeMs = 1800;
+    const nextDelay = () => 2000 + Math.random()*2000; // 2–4s
 
-    // Fallback list if there's no manifest.json available (02 removed)
-    const FALLBACK_NUMBERS = [1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];
-    const baseName = n => `bed-bug-exterminator-removal-toronto-${String(n).padStart(2,"0")}.webp`;
+    // ---------- HELPERS ----------
+    const pad2 = n => String(n).padStart(2,"0");
+    const nameFor = n => `${BASE}${pad2(n)}.webp`;
 
-    // Choose actual path the browser will use right now, so decode() matches what displays
-    function choosePath(file){
-      const useMobile = window.matchMedia("(max-width: 767px)").matches;
-      const dpr = window.devicePixelRatio || 1;
-      if (useMobile) {
-        return { base1: M1, base2: M2, src: (dpr >= 2 ? `${M2}${file}` : `${M1}${file}`) };
-      } else {
-        return { base1: D1, base2: D2, src: (dpr >= 2 ? `${D2}${file}` : `${D1}${file}`) };
-      }
-    }
-
-    // Load manifest.json if present; else use fallback numbers
-    async function getList() {
-      try {
-        const res = await fetch("images/manifest.json", { cache: "no-store" });
-        if (!res.ok) throw new Error("no manifest");
-        const data = await res.json();
-        // data.desktop / data.mobile should be arrays of filenames (strings)
-        const dSet = new Set(data.desktop || []);
-        const mSet = new Set(data.mobile  || []);
-        const both = [...dSet].filter(f => mSet.has(f));
-        if (both.length) return both; // list of filenames that exist in both families
-        throw new Error("empty manifest");
-      } catch {
-        // make filenames from fallback numbers (02 removed)
-        return FALLBACK_NUMBERS.map(baseName);
-      }
-    }
-
-    function makePicture(file) {
-      const { base1, base2, src } = choosePath(file);
-
-      const picture = document.createElement("picture");
-      picture.className = "slide";
-
-      // Mobile source for <= 767px
+    // set sources into a <picture> element safely
+    function setPictureSources(picEl, file) {
+      picEl.innerHTML = ""; // clean
       const source = document.createElement("source");
       source.media  = "(max-width: 767px)";
       source.srcset = `${M1}${file} 1x, ${M2}${file} 2x`;
-      picture.appendChild(source);
 
       const img = document.createElement("img");
       img.alt = "";
+      img.src = `${D1}${file}`;
+      img.srcset = `${D1}${file} 1x, ${D2}${file} 2x`;
       img.decoding = "async";
-      img.src = src;
-      // Provide both densities for the chosen family
-      img.srcset = `${base1}${file} 1x, ${base2}${file} 2x`;
 
-      // Robust fallback: try partner density, then mobile 1x
+      // robust fallbacks to avoid white frames
       img.onerror = () => {
         img.onerror = null;
-        if (src.startsWith(base1)) {
-          img.src = `${base2}${file}`;
-          img.onerror = () => { img.src = `${M1}${file}`; };
-        } else {
-          img.src = `${base1}${file}`;
-          img.onerror = () => { img.src = `${M1}${file}`; };
-        }
+        img.src = `${D2}${file}`;
+        img.onerror = () => {
+          img.onerror = null;
+          img.src = `${M1}${file}`;
+        };
       };
 
-      picture.appendChild(img);
-      return picture;
+      picEl.appendChild(source);
+      picEl.appendChild(img);
+      return img;
     }
 
-    function preload(file){
-      const { src } = choosePath(file);
-      const i = new Image();
-      i.decoding = "async";
-      i.src = src;
+    // ---------- SLIDESHOW (two persistent layers) ----------
+    const slideA = document.getElementById("slideA");
+    const slideB = document.getElementById("slideB");
+    const picA = slideA.querySelector("picture");
+    const picB = slideB.querySelector("picture");
+
+    let idx = 0;         // index into NUMBERS
+    let showingA = true; // which slide is currently visible
+
+    // preload + show first
+    const firstFile = nameFor(NUMBERS[idx]);
+    const firstImg = setPictureSources(picA, firstFile);
+    (firstImg.decode ? firstImg.decode().catch(()=>{}) : Promise.resolve()).finally(() => {
+      slideA.classList.add("show");
+      scheduleNext();
+    });
+
+    function scheduleNext(){
+      setTimeout(swap, nextDelay());
     }
 
-    (async function start() {
-      const files = await getList();
-      if (!files.length) return;
+    function swap(){
+      idx = (idx + 1) % NUMBERS.length;
+      const file = nameFor(NUMBERS[idx]);
 
-      let idx = 0;
-      let current = null;
+      const incomingSlide = showingA ? slideB : slideA;
+      const incomingPic   = showingA ? picB   : picA;
+      const outgoingSlide = showingA ? slideA : slideB;
 
-      function show(file, first=false) {
-        const incoming = makePicture(file);
-        const img = incoming.querySelector("img");
+      const img = setPictureSources(incomingPic, file);
 
-        const reveal = () => {
-          slideshow.appendChild(incoming);
-
-          const activate = () => {
-            // 1) Make the new slide visible
-            incoming.classList.add("show");
-
-            // 2) After that, fade/remove the previous slide (never a gap)
-            if (!first && current) {
-              current.classList.remove("show");
-              current.classList.add("fadeout");
-              setTimeout(() => {
-                if (current && current.parentNode === slideshow) {
-                  slideshow.removeChild(current);
-                }
-              }, fadeMs + 60);
-            }
-            current = incoming;
-
-            // 3) Queue next image
-            const nextIdx = (idx + 1) % files.length;
-            preload(files[nextIdx]);
-            setTimeout(() => {
-              idx = nextIdx;
-              show(files[idx]);
-            }, randDelay());
-          };
-
-          // If reduced motion, skip RAF to avoid any desync; otherwise use RAF for perfect ordering
-          if (prefersReduced.matches) activate();
-          else requestAnimationFrame(activate);
-        };
-
-        // Decode the actual source we'll show; if unsupported, proceed anyway
-        (img.decode ? img.decode() : Promise.resolve()).catch(()=>{}).finally(reveal);
-      }
-
-      // Boot
-      preload(files[(idx + 1) % files.length]);
-      show(files[idx], true);
-
-      // If viewport class (mobile/desktop) changes during use, next cycle will adapt automatically.
-      window.addEventListener("resize", () => {
-        // Optional: warm up next image for new viewport/DPR
-        const nextIdx = (idx + 1) % files.length;
-        preload(files[nextIdx]);
-      }, { passive: true });
-    })();
+      // Wait until the image is actually decoded before fading
+      const ready = img.decode ? img.decode().catch(()=>{}) : Promise.resolve();
+      ready.finally(() => {
+        incomingSlide.classList.add("show");      // fade in
+        setTimeout(() => {                        // after fade, hide the old one
+          outgoingSlide.classList.remove("show"); // fade out completed
+        }, fadeMs + 40);
+        showingA = !showingA;
+        scheduleNext();
+      });
+    }
   </script>
 </body>
 </html>
-
