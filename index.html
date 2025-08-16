@@ -4,18 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Out-of-Body Pest Control — Bed Bug Exterminator & Removal in Toronto</title>
-
-  <!-- Inter font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --brand:#000066;        /* your deep French navy */
-      --brand-hover:#3d47ff;  /* lighter hover */
-      --fade:2200ms;          /* smooth, slow fade */
-      --interval:8000ms;      /* time each slide stays on screen */
-      --pad:clamp(16px,4vw,48px);
-      --maxw:42ch;            /* readable line length */
+      --brand:#000066;
+      --brand-hover:#3d47ff;
+      --fade:2200ms;
+      --interval:8000ms;
+      --pad:clamp(10px,3vw,24px);   /* tighter to the left/top */
+      --maxw:42ch;
     }
 
     *{box-sizing:border-box}
@@ -23,7 +21,7 @@
     body{
       font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--brand);
-      overflow:hidden; /* fixed pane: no scrolling */
+      overflow:hidden; /* fixed pane */
     }
 
     /* Slideshow behind content */
@@ -32,58 +30,59 @@
     .slide {
       opacity: 0;
       transition: opacity var(--fade) ease-in-out, transform var(--fade) ease-in-out;
-      transform: scale(1.02); /* subtle Ken Burns */
+      transform: scale(1.02);
       will-change: opacity, transform;
     }
     .slide.show { opacity: 1; transform: scale(1); }
     .slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    @media (prefers-reduced-motion: reduce){ .slide{ transition:none; transform:none; } }
 
-    @media (prefers-reduced-motion: reduce){
-      .slide{ transition:none; transform:none; }
-    }
-
-    /* Left-aligned overlay text */
+    /* Left-aligned overlay */
     .overlay{
       position: fixed; left: var(--pad); top: var(--pad);
-      display: flex; flex-direction: column; gap: clamp(6px,1.6vh,14px);
+      display: flex; flex-direction: column; gap: clamp(6px,1.4vh,12px);
       max-width: var(--maxw); text-align: left;
-      /* tiny light outline to keep navy readable on light textures */
-      text-shadow: 0 1px 0 rgba(255,255,255,.35);
+      text-shadow: 0 1px 0 rgba(255,255,255,.35); /* keeps navy readable */
     }
-    .logo{ width: clamp(140px,26vw,280px); height: auto; }
-    h1{ margin: .2rem 0 0; font-size: clamp(26px,4.6vw,44px); letter-spacing: .02em; }
+    .logo{
+      align-self:flex-start;
+      width: clamp(220px, 34vw, 520px); /* BIGGER logo */
+      height: auto;
+      display:block;
+      margin: 0 0 clamp(8px,2vh,16px) 0;
+    }
+    h1{ margin: 0; font-size: clamp(28px,4.8vw,46px); letter-spacing:.02em; }
     .tag{ font-weight: 600; }
-    .sub{ opacity: .95; }
+    .sub{ opacity:.95; }
     .lead{ font-weight: 600; }
-    .help{ opacity: .95; }
+    .help{ opacity:.95; }
+
     .links{ margin-top: 6px; display:flex; gap:12px; flex-wrap:wrap; align-items:center }
     .links a{ color: var(--brand); text-decoration: none; font-weight: 700; }
     .links a:hover{ color: var(--brand-hover); text-decoration: underline; }
-    .sep{ opacity: .5; }
+    .sep{ opacity:.5; }
 
-    /* Footnote bottom-left */
+    /* Smaller & lower footnote */
     footer.footnote{
       position: fixed; left: var(--pad); bottom: var(--pad);
-      font-size: clamp(12px,1.8vw,14px);
-      opacity: .85;
+      font-size: clamp(11px,1.4vw,13px);
+      opacity:.85;
       text-shadow: 0 1px 0 rgba(255,255,255,.35);
     }
   </style>
 
-  <!-- Hint the first images for quicker first paint -->
   <link rel="preload" as="image"
         href="images/desktop/bed-bug-exterminator-removal-toronto-01.webp"
         imagesrcset="images/mobile/bed-bug-exterminator-removal-toronto-01.webp 768w,
                      images/desktop/bed-bug-exterminator-removal-toronto-01.webp 1920w">
 </head>
 <body>
-
-  <!-- Background slideshow (JS inserts <picture> slides) -->
+  <!-- Background slideshow -->
   <div id="slideshow" aria-hidden="true"></div>
 
-  <!-- Left-aligned overlay content -->
+  <!-- Overlay content -->
   <section class="overlay" role="region" aria-label="Intro">
-    <img class="logo" src="images/brand/out-of-body-bed-bug-removal-extermination-toronto.webp" alt="Out-of-Body lettermark" width="320" height="120" decoding="async">
+    <img class="logo" src="images/brand/out-of-body-bed-bug-removal-extermination-toronto.webp" alt="Out-of-Body lettermark" width="520" height="200" decoding="async">
     <h1>OUT OF BODY</h1>
     <p class="tag">Emotionally Attuned Pest Control.</p>
     <p class="sub">Toronto’s undercover bed bug specialist.</p>
@@ -91,16 +90,15 @@
     <p class="help">If you have pictures, share them. If you have evidence, save it. Help is on the way.</p>
 
     <p class="links">
-      <a href="sms:+14164646411">TEXT +1&nbsp;416-464-6411</a>
+      <!-- Generic launch links (no hard-coded contact) -->
+      <a href="sms:">TEXT</a>
       <span class="sep">•</span>
-      <a href="mailto:hello@outofbody.ca">EMAIL hello@outofbody.ca</a>
+      <a href="mailto:">EMAIL</a>
     </p>
   </section>
 
-  <!-- Footnote -->
   <footer class="footnote" aria-label="Licensing">Fully licensed &amp; guaranteed</footer>
 
-  <!-- No-JS fallback (first image only) -->
   <noscript>
     <picture class="slide show">
       <source media="(max-width: 767px)" srcset="images/mobile/bed-bug-exterminator-removal-toronto-01.webp">
@@ -109,12 +107,12 @@
   </noscript>
 
   <script>
-    // ===== Slideshow using your existing files =====
-    const COUNT = 22; // update if you add/remove files
+    // Slideshow using your existing files
+    const COUNT = 22;
     const BASE = "bed-bug-exterminator-removal-toronto-";
     const DESKTOP_DIR = "images/desktop/";
     const MOBILE_DIR  = "images/mobile/";
-    const INTERVAL_MS = 8000; // keep in sync with --interval
+    const INTERVAL_MS = 8000;
 
     const slideshow = document.getElementById("slideshow");
     let index = 1;
@@ -123,56 +121,39 @@
       const num = String(n).padStart(2,"0");
       const d = `${DESKTOP_DIR}${BASE}${num}.webp`;
       const m = `${MOBILE_DIR}${BASE}${num}.webp`;
-
-      // <picture> chooses mobile on small screens, desktop otherwise
       const picture = document.createElement("picture");
       picture.className = "slide";
-
       const source = document.createElement("source");
       source.media = "(max-width: 767px)";
       source.srcset = m;
-
       const img = document.createElement("img");
-      img.src = d;
-      img.alt = ""; // decorative
-
+      img.src = d; img.alt = "";
       picture.appendChild(source);
       picture.appendChild(img);
       return picture;
     }
-
     function preload(n){
       const num = String(n).padStart(2,"0");
       new Image().src = `${DESKTOP_DIR}${BASE}${num}.webp`;
       new Image().src = `${MOBILE_DIR}${BASE}${num}.webp`;
     }
-
-    // first slide
     (function init(){
       const first = makeSlide(1);
       first.classList.add("show");
       slideshow.appendChild(first);
       preload(2); preload(3);
     })();
-
     function nextSlide(){
       index = (index % COUNT) + 1;
       const slide = makeSlide(index);
       slideshow.appendChild(slide);
-      requestAnimationFrame(() => slide.classList.add("show"));
-
-      // keep only two layers (current + previous)
-      while (slideshow.children.length > 2) {
-        slideshow.removeChild(slideshow.firstChild);
-      }
-
+      requestAnimationFrame(()=> slide.classList.add("show"));
+      while (slideshow.children.length > 2) slideshow.removeChild(slideshow.firstChild);
       preload((index % COUNT) + 1);
     }
-
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
       setInterval(nextSlide, INTERVAL_MS);
     }
   </script>
-
 </body>
 </html>
