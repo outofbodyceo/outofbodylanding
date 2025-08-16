@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Out of Body Pest Control — Bed Bug Exterminator & Removal in Toronto</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
@@ -33,13 +34,16 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity var(--fade) ease-in-out, transform var(--fade) ease-in-out;
-      transform: scale(1.01);
+      transform: scale(1.01); /* subtle calm zoom */
       will-change: opacity, transform;
     }
     .slide.show    { opacity: 1; transform: scale(1); }
     .slide.fadeout { opacity: 0; }
     .slide img{ width:100%; height:100%; object-fit:cover; display:block; background:#fff; }
-    @media (prefers-reduced-motion: reduce){ .slide{ transition:none; transform:none } }
+    /* Keep the fade even with reduced motion; drop only the zoom */
+    @media (prefers-reduced-motion: reduce){
+      .slide{ transition: opacity var(--fade) ease-in-out; transform:none; }
+    }
 
     /* Overlay content */
     .overlay{
@@ -101,7 +105,7 @@
       :root{ --gap:clamp(10px,1.8vh,16px); --maxw:90ch }
       .logo{ width: clamp(360px, 70vw, 820px) }
       .help-group{ margin-top: clamp(16px, 12vh, 18vh); }
-      .lead{ white-space: normal; } /* only wrap on very tiny screens */
+      .lead{ white-space: normal; } /* wrap on very tiny screens */
     }
   </style>
 
@@ -151,10 +155,22 @@
       return m ? parseFloat(m[1]) : 1800;
     })();
     const randDelay = () => 2000 + Math.random() * 2000; // 2–4s
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    // Fallback list if there's no manifest.json available
+    // Fallback list if there's no manifest.json available (02 removed)
     const FALLBACK_NUMBERS = [1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];
     const baseName = n => `bed-bug-exterminator-removal-toronto-${String(n).padStart(2,"0")}.webp`;
+
+    // Choose actual path the browser will use right now, so decode() matches what displays
+    function choosePath(file){
+      const useMobile = window.matchMedia("(max-width: 767px)").matches;
+      const dpr = window.devicePixelRatio || 1;
+      if (useMobile) {
+        return { base1: M1, base2: M2, src: (dpr >= 2 ? `${M2}${file}` : `${M1}${file}`) };
+      } else {
+        return { base1: D1, base2: D2, src: (dpr >= 2 ? `${D2}${file}` : `${D1}${file}`) };
+      }
+    }
 
     // Load manifest.json if present; else use fallback numbers
     async function getList() {
@@ -163,11 +179,10 @@
         if (!res.ok) throw new Error("no manifest");
         const data = await res.json();
         // data.desktop / data.mobile should be arrays of filenames (strings)
-        // Validate and intersect sets so both mobile & desktop exist
         const dSet = new Set(data.desktop || []);
         const mSet = new Set(data.mobile  || []);
         const both = [...dSet].filter(f => mSet.has(f));
-        if (both.length) return both; // list of filenames
+        if (both.length) return both; // list of filenames that exist in both families
         throw new Error("empty manifest");
       } catch {
         // make filenames from fallback numbers (02 removed)
@@ -176,9 +191,12 @@
     }
 
     function makePicture(file) {
+      const { base1, base2, src } = choosePath(file);
+
       const picture = document.createElement("picture");
       picture.className = "slide";
 
+      // Mobile source for <= 767px
       const source = document.createElement("source");
       source.media  = "(max-width: 767px)";
       source.srcset = `${M1}${file} 1x, ${M2}${file} 2x`;
@@ -186,26 +204,32 @@
 
       const img = document.createElement("img");
       img.alt = "";
-      img.src = `${D1}${file}`;
-      img.srcset = `${D1}${file} 1x, ${D2}${file} 2x`;
+      img.decoding = "async";
+      img.src = src;
+      // Provide both densities for the chosen family
+      img.srcset = `${base1}${file} 1x, ${base2}${file} 2x`;
 
-      // If 1x missing, try 2x; if that fails, try mobile 1x as a last resort
+      // Robust fallback: try partner density, then mobile 1x
       img.onerror = () => {
         img.onerror = null;
-        img.src = `${D2}${file}`;
-        img.onerror = () => {
-          img.onerror = null;
-          img.src = `${M1}${file}`;
-        };
+        if (src.startsWith(base1)) {
+          img.src = `${base2}${file}`;
+          img.onerror = () => { img.src = `${M1}${file}`; };
+        } else {
+          img.src = `${base1}${file}`;
+          img.onerror = () => { img.src = `${M1}${file}`; };
+        }
       };
 
       picture.appendChild(img);
       return picture;
     }
 
-    function preload(file) {
-      const a = new Image(); a.src = `${D1}${file}`;
-      const b = new Image(); b.src = `${M1}${file}`;
+    function preload(file){
+      const { src } = choosePath(file);
+      const i = new Image();
+      i.decoding = "async";
+      i.src = src;
     }
 
     (async function start() {
@@ -217,17 +241,17 @@
 
       function show(file, first=false) {
         const incoming = makePicture(file);
-
-        // Only show the new slide after its image actually loads → no white flash
         const img = incoming.querySelector("img");
-        img.decode?.().catch(()=>{})  // use decode when available
-          .finally(() => {
-            slideshow.appendChild(incoming);
-            // Next frame: fade in
-            requestAnimationFrame(() => incoming.classList.add("show"));
 
+        const reveal = () => {
+          slideshow.appendChild(incoming);
+
+          const activate = () => {
+            // 1) Make the new slide visible
+            incoming.classList.add("show");
+
+            // 2) After that, fade/remove the previous slide (never a gap)
             if (!first && current) {
-              // Fade old out, remove after fade
               current.classList.remove("show");
               current.classList.add("fadeout");
               setTimeout(() => {
@@ -238,20 +262,36 @@
             }
             current = incoming;
 
-            // Schedule next after a random delay and preload it
+            // 3) Queue next image
             const nextIdx = (idx + 1) % files.length;
             preload(files[nextIdx]);
             setTimeout(() => {
               idx = nextIdx;
               show(files[idx]);
             }, randDelay());
-          });
+          };
+
+          // If reduced motion, skip RAF to avoid any desync; otherwise use RAF for perfect ordering
+          if (prefersReduced.matches) activate();
+          else requestAnimationFrame(activate);
+        };
+
+        // Decode the actual source we'll show; if unsupported, proceed anyway
+        (img.decode ? img.decode() : Promise.resolve()).catch(()=>{}).finally(reveal);
       }
 
       // Boot
       preload(files[(idx + 1) % files.length]);
       show(files[idx], true);
+
+      // If viewport class (mobile/desktop) changes during use, next cycle will adapt automatically.
+      window.addEventListener("resize", () => {
+        // Optional: warm up next image for new viewport/DPR
+        const nextIdx = (idx + 1) % files.length;
+        preload(files[nextIdx]);
+      }, { passive: true });
     })();
   </script>
 </body>
 </html>
+
